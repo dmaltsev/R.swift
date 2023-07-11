@@ -383,6 +383,7 @@ public struct Struct {
     public var accessControl = AccessControl.none
     public let name: SwiftIdentifier
     public var protocols: [TypeReference] = []
+    public var inlines: [PlainBinding] = []
     public var lets: [LetBinding] = []
     public var vars: [VarGetter] = []
     public var inits: [Init] = []
@@ -410,6 +411,7 @@ public struct Struct {
         self.additionalModuleReferences = additionalModuleReferences
 
         let members = membersBuilder()
+        self.inlines = members.inlines
         self.lets = members.lets
         self.vars = members.vars
         self.inits = members.inits
@@ -487,13 +489,19 @@ public struct Struct {
         if !typealiasses.isEmpty && !inits.isEmpty {
             pp.append(line: "")
         }
-
+        
         pp.indented { pp in
             for inib in inits {
                 if !inib.comments.isEmpty {
                     pp.append(line: "")
                 }
                 inib.render(&pp)
+            }
+        }
+
+        pp.indented { pp in
+            for inline in inlines {
+                inline.render(&pp)
             }
         }
 

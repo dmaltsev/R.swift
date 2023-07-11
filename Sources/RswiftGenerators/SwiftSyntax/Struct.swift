@@ -90,6 +90,18 @@ public struct LetBinding {
     }
 }
 
+public struct PlainBinding {
+    public let string: String
+
+    public init(string: String) {
+        self.string = string
+    }
+
+    func render(_ pp: inout PrettyPrinter) {
+        pp.append(line: string)
+    }
+}
+
 public struct VarGetter {
     public let comments: [String]
     public let deploymentTarget: DeploymentTarget?

@@ -10,12 +10,26 @@ import RswiftResources
 
 
 extension Struct {
+    
+    public func generatePlainString(string: String) -> PlainBinding {
+        PlainBinding(string: string)
+    }
+    
+    public func generateVarGetterForString(name: String) -> VarGetter {
+        VarGetter(
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            typeReference: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: preferredLanguages ?? nil, locale: nil)"
+        )
+    }
+    
     public func generateBundleVarGetterForString(name: String) -> VarGetter {
         VarGetter(
             deploymentTarget: deploymentTarget,
             name: SwiftIdentifier(name: name),
             typeReference: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: nil)"
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: preferredLanguages ?? nil, locale: nil)"
         )
     }
 

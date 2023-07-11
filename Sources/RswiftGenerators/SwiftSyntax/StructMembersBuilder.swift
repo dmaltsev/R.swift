@@ -8,6 +8,7 @@
 import Foundation
 
 public struct StructMembers {
+    var inlines: [PlainBinding] = []
     var lets: [LetBinding] = []
     var vars: [VarGetter] = []
     var inits: [Init] = []
@@ -17,6 +18,7 @@ public struct StructMembers {
 
     func sorted() -> StructMembers {
         var new = self
+        new.inlines.sort { $0.string < $1.string }
         new.lets.sort { $0.name < $1.name }
         new.vars.sort { $0.name < $1.name }
         new.funcs.sort { $0.name < $1.name }
@@ -30,6 +32,10 @@ public struct StructMembers {
 public struct StructMembersBuilder {
     public static func buildExpression(_ members: Void) -> StructMembers {
         StructMembers()
+    }
+    
+    public static func buildExpression(_ expression: PlainBinding) -> StructMembers {
+        StructMembers(inlines: [expression])
     }
 
     public static func buildExpression(_ expression: LetBinding) -> StructMembers {
@@ -86,6 +92,7 @@ public struct StructMembersBuilder {
 
     public static func buildArray(_ members: [StructMembers]) -> StructMembers {
         StructMembers(
+            inlines: members.flatMap(\.inlines),
             lets: members.flatMap(\.lets),
             vars: members.flatMap(\.vars),
             inits: members.flatMap(\.inits),
@@ -97,6 +104,7 @@ public struct StructMembersBuilder {
 
     public static func buildBlock(_ members: StructMembers...) -> StructMembers {
         StructMembers(
+            inlines: members.flatMap(\.inlines),
             lets: members.flatMap(\.lets),
             vars: members.flatMap(\.vars),
             inits: members.flatMap(\.inits),

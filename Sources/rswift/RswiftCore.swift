@@ -209,7 +209,7 @@ public struct RswiftCore {
             }
 
             if generators.contains(.string), !stringStruct.isEmpty {
-                stringStruct.generatePlainString(string: "var preferredLanguages: [String]? = nil")
+                stringStruct.generatePlainString(string: "public var preferredLanguages: [String]? = nil")
                 stringStruct.generateBundleVarGetterForString(name: "string")
                 stringStruct.generateBundleFunctionForString(name: "string")
                 stringStruct.generateLocaleFunctionForString(name: "string")
